@@ -1,0 +1,36 @@
+name: Python CI
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest  # vagy egy másik operációs rendszer, ha szükséges
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.9'  # állítsd be a kívánt Python verziót
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt  # Feltételezve, hogy van requirements.txt fájl
+
+    - name: Run tests
+      run: |
+        python -m unittest discover  # Ha unittestet használsz teszteléshez
+
+    - name: Check for code quality
+      run: |
+        pylint square.py  # Ha pylint-tel ellenőrzöd a kódot
+

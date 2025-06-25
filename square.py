@@ -1,6 +1,7 @@
 """A simple Flask app to square a number."""
 
 from flask import Flask, request, render_template_string
+import os
 
 app = Flask(__name__)
 
@@ -26,9 +27,11 @@ def index():
         try:
             number = float(request.form["number"])
             result = square_number(number)
-        except ValueError:
+        except (ValueError, TypeError):
             result = "Invalid input!"
     return render_template_string(HTML_TEMPLATE, result=result)
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))  # Cloud Run uses PORT=8080, local default is 5000
+    app.run(debug=True, host="0.0.0.0", port=port)
+
